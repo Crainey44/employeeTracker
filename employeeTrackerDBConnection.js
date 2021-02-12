@@ -85,7 +85,7 @@ function start(){
 }
 
 function addEmployee() {
-  console.log("Inserting a new employee.\n");
+  console.log("Inserting a new employee");
   inquirer
   .prompt ([
     {
@@ -116,7 +116,7 @@ function addEmployee() {
       res,
       function(err,res) {
         if (err) throw err;
-        console.log("Employee has been added\n");
+        console.log("Employee has been added");
 
         start ();
       }
@@ -155,7 +155,7 @@ function removeEmployee(){
       `DELETE FROM employees WHERE concat(first_name, ' ' ,last_name) = '${res.employee}'`,
         function(err, res) {
         if (err) throw err;
-        console.log( "Employee has been deleted\n");
+        console.log( "Employee has been deleted");
      start();
     });
     });
@@ -164,40 +164,39 @@ function removeEmployee(){
       };
 
      
-function updateEmployeeRole(){
-        ​
-  connection.query("SELECT first_name, last_name, id FROM employees",
-    function(err,res){
-      for (let i=0; i <res.length; i++){
-       employees.push(res[i].first_name + " " + res[i].last_name);
-      }
-     const employees = res.map(employee => ({name: employee.first_name + " " + employee.last_name, value: employee.id}))
-        ​
-     inquirer
-     .prompt([
-            {
-     type: "list",
-     name: "employeeName",
-     message: "Which employee's role would you like to update?", 
-     choices: employees
-      },
-      {
-       type: "input",
-       name: "role",
-       message: "What is your new role?"
-            }
-          ])
-          .then (function(res){
-            connection.query(`UPDATE employees SET role_id = ${res.role} WHERE id = ${res.employeeName}`,
-            function (err, res){
-              console.log(res);
-              start()
-            }
-            );
-          })
-        }
-        )
-        }
+// function updateEmployeeRole(){    ​
+//   connection.query("SELECT first_name, last_name, id FROM employees",
+//     function(err,res){
+//       for (let i=0; i <res.length; i++){
+//        employees.push(res[i].first_name + " " + res[i].last_name);
+//       }
+//      const employees = res.map(employee => ({name: employee.first_name + " " + employee.last_name, value: employee.id}))
+//         ​
+//      inquirer
+//      .prompt([
+//             {
+//      type: "list",
+//      name: "employeeName",
+//      message: "Which employee's role would you like to update?", 
+//      choices: employees
+//       },
+//       {
+//        type: "input",
+//        name: "role",
+//        message: "What is your new role?"
+//             }
+//           ])
+//           .then (function(res){
+//             connection.query(`UPDATE employees SET role_id = ${res.role} WHERE id = ${res.employeeName}`,
+//             function (err, res){
+//               console.log(res);
+//               start()
+//             }
+//             );
+//           })
+//         }
+//         )
+//         }
   function addDepartment(){
           inquirer
           .prompt([
