@@ -12,12 +12,13 @@ const connection = mysql.createConnection({
 
   // Be sure to update with your own MySQL password!
   password: 'password',
-  database: 'employeeTracker_DB',
+  database: 'employeeTracker_db',
 });
 
 connection.connect((err) => {
   if (err) throw err;
   console.log(`connected as id ${connection.threadId}`);
+  start();
   connection.end();
 });
 
@@ -49,7 +50,7 @@ function start(){
         break;
 
       case "View all Employees":
-          viewAllEmployees();
+          viewAllEmployee();
           break;
         
       case "Remove Employees":
@@ -69,7 +70,7 @@ function start(){
         break;
 
       case "Add Roles":
-        addRoles();
+        addRole();
         break;
 
       case "View All Roles":
@@ -111,21 +112,23 @@ function addEmployee() {
     }
   ])
   .then (function(res){
+    console.log(res);
     const query = connection.query(
-      "INSERT INTO employees SET ?",
+      "INSERT INTO employee SET ?",
       res,
-      function(err,res) {
+      function(err, res) {
         if (err) throw err;
         console.log("Employee has been added");
 
-        start ();
+        start();
       }
-    );
-  })
-}
+  );
+  });
+};
 function viewAllEmployees() {
 
-  connection.query("SELECT employees.first_name, employees.last_name, roles.title AS \"role\", managers.first_name AS \"manager\" FROM employees LEFT JOIN roles ON employees.role_id = roles.id LEFT JOIN employees managers ON employees.manager_id = managers.id GROUP BY employees.id",  
+  connection.query(
+        "SELECT * FROM employee",
   function(err, res) {
     if (err) throw err;
     console.table(res);
@@ -136,7 +139,7 @@ function viewAllEmployees() {
 function removeEmployee(){
   let employeeList = [];
   connection.query(
-    "SELECT employees.first_name, employees.last_name FROM employees", (err,res) => {
+    "SELECT employee.first_name, employee.last_name FROM employees", (err,res) => {
       for (let i = 0; i < res.length; i++){
         employeeList.push(res[i].first_name + " " + res[i].last_name);
       }
@@ -196,7 +199,7 @@ function removeEmployee(){
 //           })
 //         }
 //         )
-//         }
+//         };
   function addDepartment(){
           inquirer
           .prompt([
@@ -230,15 +233,7 @@ function viewAllDepartments(){
           }
 
 function addRole() {
-  const departments= [];
-  connection.query("SELECT * FROM departments",
-  function(err,res){
-    if(err) throw err;
-    for (let i=0; i <res.length; i++){
-      res[i].first_name + " " + res[i].last_name
-      departments.push({name, value: res[i].id}); 
-    }
-    inquirer
+     inquirer
     .prompt([
       {
         type: "input", 
@@ -250,12 +245,6 @@ function addRole() {
     name: "salary",
     message: "What is the salary for the role?"
   },
-  {
-    type: "list",
-    name: "department",
-    message: "what department?",
-    choices: departments
-  }
     ])
     .then (function(res){
       console.log(res);
@@ -274,13 +263,13 @@ function addRole() {
         }
       )
     })
-  })
+  }
   function viewAllRoles(){
     connection.query ("SELECT * FROM roles", function(err, res){
       console.table(res);
       start();
     })
     }
-}
+
         
     
